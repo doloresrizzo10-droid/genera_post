@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genera Post — Affitti Brevi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f7f5f0;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    color: #1a1a1a;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .brand {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .brand-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    color: #1a1a1a;
+  }
+
+  .brand-sub {
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 6px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ece9e2;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 1.25rem;
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .field {
+    margin-bottom: 1rem;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 6px;
+    font-weight: 400;
+  }
+
+  .field input,
+  .field textarea,
+  .field select {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: #1a1a1a;
+    background: #faf9f7;
+    border: 1px solid #e8e4dc;
+    border-radius: 10px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+  }
+
+  .field input:focus,
+  .field textarea:focus,
+  .field select:focus {
+    border-color: #b5a98a;
+    background: #fff;
+  }
+
+  .field textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  .btn-genera {
+    width: 100%;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: #2c2c2a;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0.5rem;
+  }
+
+  .btn-genera:hover { background: #444; }
+  .btn-genera:active { transform: scale(0.99); }
+  .btn-genera:disabled { background: #ccc; cursor: not-allowed; }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .results { margin-top: 2rem; }
+
+  .results-header {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #ece9e2;
+  }
+
+  .post-card {
+    background: #fff;
+    border: 1px solid #ece9e2;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.4s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .post-num {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+  }
+
+  .copy-btn {
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    color: #888;
+    background: #faf9f7;
+    border: 1px solid #e8e4dc;
+    border-radius: 8px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .copy-btn:hover { background: #f0ede6; color: #444; }
+
+  .post-testo {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #2c2c2a;
+    margin-bottom: 12px;
+    white-space: pre-line;
+  }
+
+  .post-divider {
+    border: none;
+    border-top: 1px solid #f0ede6;
+    margin: 12px 0;
+  }
+
+  .post-caption {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    color: #2c2c2a;
+    margin-bottom: 10px;
+  }
+
+  .post-hashtag {
+    font-size: 12px;
+    color: #b5a98a;
+    line-height: 1.9;
+  }
+
+  .error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: #dc2626;
+    margin-top: 1rem;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 3rem;
+    font-size: 12px;
+    color: #ccc;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 480px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .brand-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="brand">
+    <h1 class="brand-title">Genera i tuoi post</h1>
+    <p class="brand-sub">Contenuti social per affitti brevi · powered by AI</p>
+  </div>
+
+  <div class="card">
+    <p class="section-label">La tua struttura</p>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Nome struttura</label>
+        <input type="text" id="nome_struttura" placeholder="Villa Adler" />
+      </div>
+      <div class="field">
+        <label>Dove si trova</label>
+        <input type="text" id="dove" placeholder="San Vigilio di Marebbe, Dolomiti" />
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>Tipo di struttura</label>
+        <input type="text" id="tipo_struttura" placeholder="Piccolo residence di charme" />
+      </div>
+      <div class="field">
+        <label>Lingua dei post</label>
+        <select id="lingua">
+          <option value="italiano">Italiano</option>
+          <option value="inglese">Inglese</option>
+          <option value="tedesco">Tedesco</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Ospiti tipo</label>
+      <input type="text" id="ospiti_tipo" placeholder="Famiglie e coppie, amanti della montagna" />
+    </div>
+
+    <div class="field">
+      <label>Cosa offre</label>
+      <textarea id="cosa_offre" placeholder="Natura, tranquillità, vicinanza alle piste, accoglienza curata..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Tono di voce</label>
+      <input type="text" id="tono_voce" placeholder="Caldo, accogliente, elegante ma non distante" />
+    </div>
+
+    <div class="field">
+      <label>Temi da trattare</label>
+      <textarea id="temi" placeholder="Paesaggi, stagioni in montagna, attività outdoor, relax..."></textarea>
+    </div>
+  </div>
+
+  <button class="btn-genera" id="btn" onclick="genera()">
+    <i class="ti ti-sparkles"></i>
+    Genera 7 post
+  </button>
+
+  <div id="error-box"></div>
+  <div id="results"></div>
+
+  <p class="footer">genera-post · automazione AI per strutture ricettive</p>
+
+</div>
+
+<script>
+const WEBHOOK = 'https://mary10.app.n8n.cloud/webhook/f79c0d14-1cf8-4186-b459-24cc3f8cb5b9';
+
+function val(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function parsePost(text) {
+  const testo = (text.match(/TESTO:\s*([\s\S]+?)(?=CAPTION:|$)/i)?.[1] || '').trim();
+  const caption = (text.match(/CAPTION:\s*([\s\S]+?)(?=HASHTAG:|$)/i)?.[1] || '').trim();
+  const hashtag = (text.match(/HASHTAG:\s*([\s\S]+)/i)?.[1] || '').trim();
+  return { testo, caption, hashtag };
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = '<i class="ti ti-check"></i> Copiato!';
+    setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy"></i> Copia'; }, 1800);
+  });
+}
+
+async function genera() {
+  const btn = document.getElementById('btn');
+  const errBox = document.getElementById('error-box');
+  const results = document.getElementById('results');
+
+  errBox.innerHTML = '';
+  results.innerHTML = '';
+
+  const payload = {
+    nome_struttura: val('nome_struttura'),
+    dove: val('dove'),
+    tipo_struttura: val('tipo_struttura'),
+    ospiti_tipo: val('ospiti_tipo'),
+    cosa_offre: val('cosa_offre'),
+    tono_voce: val('tono_voce'),
+    temi: val('temi'),
+    lingua: val('lingua')
+  };
+
+  if (!payload.nome_struttura || !payload.dove) {
+    errBox.innerHTML = '<div class="error">Inserisci almeno il nome della struttura e la località.</div>';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generazione in corso...';
+
+  try {
+    const res = await fetch(WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    const rawText = data?.output || data?.text || (Array.isArray(data) && data[0]?.output) || '';
+
+    if (!rawText) throw new Error('Nessun contenuto ricevuto dal server.');
+
+    const parts = rawText.split(/POST \d+:/i).filter(p => p.trim());
+
+    results.innerHTML = '<p class="results-header">I tuoi 7 post</p>';
+
+    parts.forEach((part, i) => {
+      const { testo, caption, hashtag } = parsePost(part);
+      const fullText = `${testo}\n\n${caption}\n\n${hashtag}`;
+      const card = document.createElement('div');
+      card.className = 'post-card';
+      card.style.animationDelay = (i * 0.08) + 's';
+      card.innerHTML = `
+        <div class="post-header">
+          <span class="post-num">Post ${i + 1}</span>
+          <button class="copy-btn" onclick="copyText(this, ${JSON.stringify(fullText)})">
+            <i class="ti ti-copy"></i> Copia
+          </button>
+        </div>
+        <p class="post-testo">${testo}</p>
+        <hr class="post-divider">
+        <p class="post-caption">${caption}</p>
+        <p class="post-hashtag">${hashtag}</p>
+      `;
+      results.appendChild(card);
+    });
+
+  } catch (e) {
+    errBox.innerHTML = `<div class="error">Errore durante la generazione. Controlla che n8n sia attivo e riprova.<br><small style="opacity:0.7">${e.message}</small></div>`;
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<i class="ti ti-sparkles"></i> Genera altri post';
+}
+</script>
+</body>
+</html>
