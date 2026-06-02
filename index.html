@@ -261,7 +261,7 @@
 
   <div class="brand">
     <h1 class="brand-title">Genera i tuoi post</h1>
-    <p class="brand-sub">Contenuti social per affitti brevi · powered by AI</p>
+    <p class="brand-sub">Contenuti social per affitti brevi</p>
   </div>
 
   <div class="card">
@@ -322,7 +322,7 @@
   <div id="error-box"></div>
   <div id="results"></div>
 
-  <p class="footer">genera-post · automazione AI per strutture ricettive</p>
+  <p class="footer">genera-post</p>
 
 </div>
 
@@ -382,7 +382,7 @@ async function genera() {
     });
 
     const data = await res.json();
-    const rawText = data?.output || data?.text || (Array.isArray(data) && data[0]?.output) || '';
+    const rawText = typeof data === "string" ? data : (data?.output || data?.text || data?.message || (Array.isArray(data) && data[0]?.output) || JSON.stringify(data));
 
     if (!rawText) throw new Error('Nessun contenuto ricevuto dal server.');
 
